@@ -8,91 +8,94 @@ public class Main {
         RomanDigit roma = new RomanDigit();
         String[] sign = {"-", "*", "+", "/"};
         String[] splitSign = {"-", "\\*", "\\+", "/"};
-
         Scanner input = new Scanner(System.in);
         while (true) {
             System.out.print("Введите выражение - ");
             String exp = input.nextLine();
-
             String expWithoutSpaces = exp.replaceAll(" ", "");
-
             if (expWithoutSpaces.length() < 2) {
-                throw new Exception("т.к. строка не является математической операцией");
+                throw new Exception("Строка не является математической операцией");
             }
+
             // Находим будущий индекс разделителя для массива splitSign
-            int splitNumber = 0;
+            int splitNumber = -1;
             for (int i = 0; i < sign.length; i++) {
                 if (expWithoutSpaces.contains(sign[i])) {
                     splitNumber = i;
                     break;
                 }
             }
-            String[] digits = expWithoutSpaces.split(splitSign[splitNumber]);
-            if (digits.length > 2) {
-                throw new Exception("т.к. формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *");
+
+            // Проверяем оператор выражения
+            if (splitNumber == -1) {
+                throw new Exception("Не соответствующая арифметическая операция");
             }
 
+            // Делим строку на отдельные операнды при помощи метода split().
+            String[] digits = expWithoutSpaces.split(splitSign[splitNumber]);
 
-            if (roma.containRoma(digits[0]) != roma.containRoma(digits[1])) {
+            // Проверяем согласно условию - a + b, a - b, a * b, a / b.
+            // По таким условиям в нашем массиве не может быть более двух операндов.
+            if (digits.length > 2) {
+                throw new Exception("Формат математической операции не удовлетворяет заданию - два операнда и один оператор (+, -, /, *");
+            }
+            if (roma.containRoma(digits[0]) == roma.containRoma(digits[1])) {
 
-                throw new Exception("т.к. используются одновременно разные системы счисления");
-
-            } else {
-
-                if (roma.containRoma(digits[0]) && roma.containRoma(digits[1])) {
+                // Если оба элемента в массиве Римские числа
+                // то конвертируем их в методе romanToInt и отправляем в switch
+                if (roma.containRoma(digits[0])) {
                     a = roma.romanToInt(digits[0]);
                     b = roma.romanToInt(digits[1]);
-                    int result = 0;
 
-                    switch (sign[splitNumber]) {
-                        case "-":
-                            result = a - b;
-                            break;
-                        case "*":
-                            result = a * b;
-                            break;
-                        case "+":
-                            result = a + b;
-                            break;
-                        case "/":
-                            result = a / b;
-                    }
-                    if (result >= 0) {
-                        System.out.println(roma.intToRoman(result));
-                    } else {
-                        throw new Exception("т.к. в римской системе нет отрицательных чисел");
+                    if (a > 10 && b > 10) {
+                        throw new Exception("В римской системе нет отрицательных чисел");
                     }
                 } else {
-
-
-                    a = Integer.parseInt(digits[0].replaceAll(" ", ""));
-                    b = Integer.parseInt(digits[1].replaceAll(" ", ""));
-
-                    int result = 0;
-
-                    switch (sign[splitNumber]) {
-                        case "-":
-                            result = a - b;
-                            break;
-                        case "*":
-                            result = a * b;
-                            break;
-                        case "+":
-                            result = a + b;
-                            break;
-                        case "/":
-                            result = a / b;
+                    // Иначе это цифры, парсим их в Int и передаем в switch
+                    // сразу проверяя цифры ли там вообще...
+                    try {
+                        a = Integer.parseInt(digits[0]);
+                        b = Integer.parseInt(digits[1]);
+                    } catch (Exception e) {
+                        throw new Exception("Калькулятор умеет работать только с целыми числами.");
                     }
-                    System.out.println(result);
-
-
                 }
+                if (a > 10 || b > 10) {
+                    throw new Exception("Калькулятор должен принимать на вход числа от 1 до 10 включительно, не более.");
+                }
+                int result = 0;
+
+                // Находим результат
+                switch (sign[splitNumber]) {
+                    case "-":
+                        result = a - b;
+                        break;
+                    case "*":
+                        result = a * b;
+                        break;
+                    case "+":
+                        result = a + b;
+                        break;
+                    case "/":
+                        result = a / b;
+                }
+                if (roma.containRoma(digits[0])) {
+                    System.out.println(roma.intToRoman(result));
+                } else {
+                    System.out.println(result);
+                }
+
+
+            } else {
+                throw new Exception("Используются одновременно разные системы счисления");
             }
 
 
         }
     }
-
-
 }
+
+
+
+
 
