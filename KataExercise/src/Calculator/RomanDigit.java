@@ -19,7 +19,7 @@ public class RomanDigit {
     }
 
     public int romanToInt(String s) throws Exception {
-        if (romanDigit.containsKey(s)) {
+        if (romanDigit.containsKey(s.charAt(0))) {
             int result = 0;
             int prev = 0;
             for (int i = s.length() - 1; i >= 0; i--) {

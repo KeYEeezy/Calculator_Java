@@ -47,9 +47,7 @@ public class Main {
                     a = roma.romanToInt(digits[0]);
                     b = roma.romanToInt(digits[1]);
 
-                    if (a > 10 && b > 10) {
-                        throw new Exception("В римской системе нет отрицательных чисел");
-                    }
+
                 } else {
                     // Иначе это цифры, парсим их в Int и передаем в switch
                     // сразу проверяя цифры ли там вообще...
