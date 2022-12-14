@@ -3,16 +3,27 @@ package Calculator;
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) throws Exception {
+        System.out.print("Введите выражение - ");
+
+        Scanner input = new Scanner(System.in);
+        String res = calc(input.nextLine());
+        System.out.println(res);
+
+
+    }
+
+    public static String calc(String input) throws Exception {
         int a, b;
         RomanDigit roma = new RomanDigit();
         String[] sign = {"-", "*", "+", "/"};
         String[] splitSign = {"-", "\\*", "\\+", "/"};
-        Scanner input = new Scanner(System.in);
+
         while (true) {
-            System.out.print("Введите выражение - ");
-            String exp = input.nextLine();
-            String expWithoutSpaces = exp.replaceAll(" ", "");
+
+
+            String expWithoutSpaces = input.replaceAll(" ", "");
             if (expWithoutSpaces.length() < 2) {
                 throw new Exception("Строка не является математической операцией");
             }
@@ -61,26 +72,29 @@ public class Main {
                 if (a > 10 || b > 10) {
                     throw new Exception("Калькулятор должен принимать на вход числа от 1 до 10 включительно, не более.");
                 }
-                int result = 0;
+                int temp = 0;
+                String res;
 
                 // Находим результат
                 switch (sign[splitNumber]) {
                     case "-":
-                        result = a - b;
+                        temp = a - b;
                         break;
                     case "*":
-                        result = a * b;
+                        temp = a * b;
                         break;
                     case "+":
-                        result = a + b;
+                        temp = a + b;
                         break;
                     case "/":
-                        result = a / b;
+                        temp = a / b;
                 }
                 if (roma.containRoma(digits[0])) {
-                    System.out.println(roma.intToRoman(result));
+                    return res = (String) roma.intToRoman(temp);
+
                 } else {
-                    System.out.println(result);
+                    return res = Integer.toString(temp);
+
                 }
 
 
@@ -90,6 +104,7 @@ public class Main {
 
 
         }
+
     }
 }
 
